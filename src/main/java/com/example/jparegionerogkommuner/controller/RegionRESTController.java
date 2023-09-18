@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @RestController
+@CrossOrigin
 public class RegionRESTController {
 
     @Autowired
@@ -22,9 +23,6 @@ public class RegionRESTController {
 
     @Autowired
     RegionRepository regionRepository;
-
-    @Autowired
-    ApiServiceGetKommuner apiServiceGetKommuner;
 
 
     @GetMapping("/getRegioner")
@@ -35,16 +33,19 @@ public class RegionRESTController {
 
 
     //All these method get the data from our database.
-    @GetMapping("/regioner")
+    @GetMapping("/region")
     public List<Region> getRegioner() {
         return regionRepository.findAll();
     }
 
     @PostMapping("/region")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Region postRegion(@RequestBody Region region) {
-        System.out.println(region);
-        return regionRepository.save(region);
+    public ResponseEntity<Region> postRegion(@RequestBody Region region) {
+        Region savedRegion = regionRepository.save(region);
+        if(savedRegion == null) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        } else {
+            return new ResponseEntity<>(savedRegion, HttpStatus.CREATED);
+        }
     }
 
     @PutMapping("/region/{id}")
@@ -73,24 +74,5 @@ public class RegionRESTController {
 
 
     }
-
-
-    //Opgave 2
-    @GetMapping("/kommuneNavne/{id}")
-    public List<String> getKommuneNavne(@PathVariable String id) {
-
-        List<String> lst = new ArrayList<>();
-        for (Kommune kommune : apiServiceGetKommuner.getKommuner()){
-            if(kommune.getRegion().getKode().equals(id)){
-                lst.add(kommune.getNavn());
-            }
-        }
-        return lst;
-    }
-
-
-
-
-
 
 }

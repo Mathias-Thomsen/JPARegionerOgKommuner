@@ -2,9 +2,12 @@ package com.example.jparegionerogkommuner.model;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -23,6 +26,14 @@ public class Region {
     @OneToMany(mappedBy = "region", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference
     private Set<Kommune> kommuner = new HashSet<>();
+
+
+    @JsonIgnore
+    public List<String> getKommuneNavne() {
+        List<String> lst = new ArrayList<>();
+        kommuner.forEach((kom) -> lst.add(kom.getNavn()));
+        return lst;
+    }
 
 
 

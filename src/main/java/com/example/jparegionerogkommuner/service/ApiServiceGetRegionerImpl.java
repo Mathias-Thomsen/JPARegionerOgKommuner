@@ -37,4 +37,9 @@ public class ApiServiceGetRegionerImpl implements ApiServiceGetRegioner {
         return regioner;
     }
 
+    @Override
+    public List<String> getKommuneNavne() {
+        return null;
+    }
+
 }

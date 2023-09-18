@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin
 public class KommuneRESTController {
 
 
@@ -32,16 +33,19 @@ public class KommuneRESTController {
     }
 
     //All these method get the data from our database.
-    @GetMapping("/kommuner")
-    public List<Kommune> getKommunerFromDB(){
+    @GetMapping("/kommune")
+    public List<Kommune> getKommune(){
         return kommuneRepository.findAll();
     }
 
     @PostMapping("/kommune")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Kommune postKommune(@RequestBody Kommune kommune) {
-        System.out.println(kommune);
-        return kommuneRepository.save(kommune);
+    public ResponseEntity<Kommune> postKommune(@RequestBody Kommune kommune) {
+        Kommune savedKommune = kommuneRepository.save(kommune);
+        if(savedKommune == null) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        } else {
+            return new ResponseEntity<>(savedKommune, HttpStatus.CREATED);
+        }
     }
 
     @PutMapping("/kommune/{id}")

@@ -2,6 +2,7 @@ package com.example.jparegionerogkommuner.model;
 
 
 import jakarta.persistence.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 @Entity
 public class Kommune {
